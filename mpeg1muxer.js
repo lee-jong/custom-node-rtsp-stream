@@ -22,13 +22,21 @@ Mpeg1Muxer = function (options) {
     }
   }
   this.spawnOptions = [
+    "-rtsp_transport",
+    "tcp",
     "-i",
     this.url,
     "-f",
-    "mpegts",
-    "-codec:v",
     "mpeg1video",
-    // additional ffmpeg options go here
+    "-b:v", // 비디오 비트레이트를 설정. 이 경우, 비디오 스트림은 1000Kbps (1Mbps)로 제한.
+    "1000k",
+    "-maxrate", // 비디오의 최대 비트레이트를 1000Kbps로 제한. 이것은 비트레이트 컨트롤에 사용.
+    "1000k",
+    "-bufsize", // 비디오 버퍼 사이즈를 설정. 이것은 버퍼링을 조절하는 데 사용.
+    "1000k",
+    "-an", // 오디오를 무시. -an 옵션은 오디오 스트림을 무시하고 비디오만 처리하도록 설정.
+    "-r", // 비디오의 프레임 속도를 설정. 이 경우, 비디오 스트림은 초당 24프레임으로 설정.
+    "24",
     ...this.additionalFlags,
     "-",
   ];
